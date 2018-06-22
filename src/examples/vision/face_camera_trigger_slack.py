@@ -70,8 +70,8 @@ def main():
                                             "short": "false"
                                         }
                                     ],
-                                    "image_url": "https://s3.amazonaws.com/visionbot/"+random_string+".png",
-                                    "thumb_url": "https://s3.amazonaws.com/visionbot/"+random_string+".png",
+                                    "image_url": "https://s3.amazonaws.com/visionbot/"+random_string+".jpg",
+                                    "thumb_url": "https://s3.amazonaws.com/visionbot/"+random_string+".jpg",
                                     "footer": "VisionBonnet",
                                     "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png"
                                 }
@@ -83,7 +83,7 @@ def main():
                     # upload file to s3
                     s3 = boto3.resource('s3')
                     data_picture = open('/tmp/faces.jpg', 'rb')
-                    s3.Bucket('visionbot').put_object(Key=random_string+'.png', Body=data_picture)
+                    s3.Bucket('visionbot').put_object(Key=random_string+'.jpg', Body=data_picture)
 
                     print("Sending Slack message")
 
