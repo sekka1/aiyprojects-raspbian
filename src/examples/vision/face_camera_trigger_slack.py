@@ -18,6 +18,7 @@ from aiy.vision.inference import CameraInference
 from aiy.vision.models import face_detection
 from picamera import PiCamera
 
+import sys
 import urllib.request
 import json
 
@@ -25,6 +26,8 @@ import boto3
 
 import string
 import random
+
+slack_url = sys.argv[1]
 
 def id_generator(size=12, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -46,8 +49,6 @@ def main():
                     camera.capture('/tmp/faces.jpg')
 
                     # Send message to slack
-                    url = "https://hooks.slack.com/services/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"
-
                     data_slack = {
                         "channel":"#visionbot",
                         "username":"webhookbot",
@@ -89,7 +90,7 @@ def main():
 
                     # Send slack message
                     params = json.dumps(data_slack).encode('utf8')
-                    req = urllib.request.Request(url, data=params,
+                    req = urllib.request.Request(slack_url, data=params,
                                                  headers={'content-type': 'application/json'})
                     response = urllib.request.urlopen(req)
 
