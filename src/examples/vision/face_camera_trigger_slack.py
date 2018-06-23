@@ -18,6 +18,7 @@ from aiy.vision.inference import CameraInference
 from aiy.vision.models import face_detection
 from picamera import PiCamera
 
+import os
 import sys
 import urllib.request
 import json
@@ -27,12 +28,30 @@ import boto3
 import string
 import random
 
-slack_url = sys.argv[1]
+slack_url = None
 
+# Setting parameters from the environment
+if os.environ.get('SLACK_URL') == None:
+    sys.exit('The SLACK_URL environment parameter must be set')
+else:
+    slack_url = os.environ['SLACK_URL']
+
+# These must be set in the environment, boto3 uses it from there to upload to S3
+if os.environ.get('AWS_ACCESS_KEY_ID') == None:
+    sys.exit('The AWS_ACCESS_KEY_ID environment parameter must be set')
+if os.environ.get('AWS_SECRET_ACCESS_KEY') == None:
+    sys.exit('The AWS_SECRET_ACCESS_KEY environment parameter must be set')
+if os.environ.get('AWS_DEFAULT_REGION') == None:
+    sys.exit('The AWS_DEFAULT_REGION environment parameter must be set')
+
+# Generate a random string
 def id_generator(size=12, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def main():
+
+    print("Starting...")
+
     with PiCamera() as camera:
         # Configure camera
         camera.resolution = (1640, 922)  # Full Frame, 16:9 (Camera v2)
